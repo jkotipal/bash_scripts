@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Clone bash scripts repo into server
+      ansible.builtin.git:
+        repo: "https://github.com/jkotipal/bash_scripts"
+        dest: "/home/ubuntu/bash_scripts"
+        force: yes
+
+    - name: Give ownership and execution permissions to build.sh
+      ansible.builtin.file:
+        path: "/home/ubuntu/bash_scripts/build.sh"
+        owner: ubuntu
+        mode: "0744"
+
+    - name: Run script to make build
+      ansible.builtin.shell: ./build.sh
+      args:
+        chdir: "/home/ubuntu/bash_scripts"
+
